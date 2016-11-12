@@ -21,9 +21,6 @@
 
         <div id="filesListSection">
           <ul>
-            <!-- <li each={files}>
-              <span data-name={name} data-id={id} onclick={load}>{name}</span>
-            </li> -->
           </ul>
         </div>
       </div>
@@ -81,6 +78,7 @@
           name: 'gDriveSync.example.txt'
         };
 
+
       function save() {
         window.current_file.content = $('#textEditor').val()
         driveService.saveFile(window.current_file, function(file){
@@ -89,6 +87,35 @@
         })
       }
       
+      function load(fileId) {
+        var file = {id: fileId }
+        window.driveService.loadFile(file, function(file){
+          window.current_file = file;
+          $('#textEditor').val(file.content);
+        })           
+      }
+
+      function list() {
+        window.driveService.listFiles(function(err, files){
+          if (err) {
+            console.log('List error:'+err)
+            return
+          }
+          $('#filesListSection ul').html("");
+          $.each(files, function( index, file ) {
+            var li = $('<li/>')
+            var newLink = $("<a />", {
+                href : "#",
+                class: 'file_link',
+                'data-id': file.id,
+                'data-name': file.name,
+                onclick: 'load("'+file.id+'")',
+                text: file.name
+            }).appendTo(li);
+            $('#filesListSection ul').append(li)
+          });
+        })     
+      }      
       //Just jquery stuff to hide, show divs
       $( document ).ready(function() {
         $('.not_authenticated').hide();
