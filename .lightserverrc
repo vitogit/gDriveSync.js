@@ -1,0 +1,6 @@
+{
+  "serveDir": ".",
+  "watchexps": [
+    "**/*.js, **/*.html"
+  ]
+}

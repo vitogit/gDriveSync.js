@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <title>gDriveSync</title>
+    <script src="../lib/login.service.js"></script>
+    <script src="../lib/drive.service.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    			  crossorigin="anonymous"></script>    
+  </head>
+  <body>
+    <h1>gDriveSync</h1>
+
+      <div class="authenticated">
+        Logged in <br/>
+        
+        <textarea id="textEditor">Write here</textarea><br/>
+        <a href="#" onclick="save()">save</a>
+        <a href="#" onclick="load()">load</a>
+        <a href="#" onclick="list()">list</a>
+        
+
+        <div id="filesListSection">
+          <ul>
+            <!-- <li each={files}>
+              <span data-name={name} data-id={id} onclick={load}>{name}</span>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+
+      <div class="not_authenticated">
+        <p>Please sign-in with your Google account to continue.</p>
+        <button onclick="login()">Sign-in</button>
+      </div>
+    
+
+    
+    <script>
+      var SCOPES = ['https://www.googleapis.com/auth/drive.file']
+      var CLIENT_ID = '';
+      window.loginService = new LoginService(CLIENT_ID, SCOPES);
+      window.driveService = new DriveService();
+
+      function init_gapi() {
+        gapi.client.load('drive' , 'v3');
+        auth();
+      } 
+      
+      function auth() {
+        if (gapi && gapi.auth) {
+          window.loginService.checkAuth(function(err, response){
+            if (err){
+              console.log('show login dialog')
+              not_auth();
+            } else {
+              console.log('is logged in')
+              is_auth();
+            }
+          })
+        } else {
+          setTimeout(auth, 10); //just in case the gapi lib is not loaded, we call it again
+        }        
+      }
+      
+      function login() {
+        loginService.login(function(err, response){
+          if (err){
+            console.log('Login error')
+            not_auth();
+          } else {
+            console.log('Login ok')
+            is_auth();
+          }
+        })    
+      } 
+      
+      //variable to reference the file id that we are modified, used when updated it
+      window.current_file = {
+          content: '',
+          id:null,
+          name: 'gDriveSync.example.txt'
+        };
+
+      function save() {
+        window.current_file.content = $('#textEditor').val()
+        driveService.saveFile(window.current_file, function(file){
+          window.current_file = file
+          console.log('saved file with id:'+file.id)
+        })
+      }
+      
+      //Just jquery stuff to hide, show divs
+      $( document ).ready(function() {
+        $('.not_authenticated').hide();
+        $('.authenticated').hide();
+      });
+      
+      function is_auth() {
+        $('.not_authenticated').hide();
+        $('.authenticated').show();
+      }
+      
+      function not_auth() {
+        $('.not_authenticated').show();
+        $('.authenticated').hide();
+      }      
+            
+        
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=init_gapi"></script>
+  </body>
+</html>
