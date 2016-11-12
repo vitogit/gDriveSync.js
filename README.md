@@ -56,3 +56,7 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
   
   
   A file is just an object like `var file = {id: null, name: 'testName', content='hello' }`
+
+
+
+The library code is based on this example https://github.com/googledrive/web-quickeditor but using the Google Drive api v3 and plain Javascript.
