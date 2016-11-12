@@ -17,7 +17,6 @@
         <a href="#" onclick="save()">save</a>
         <a href="#" onclick="load()">load</a>
         <a href="#" onclick="list()">list</a>
-        
 
         <div id="filesListSection">
           <ul>
@@ -29,9 +28,7 @@
         <p>Please sign-in with your Google account to continue.</p>
         <button onclick="login()">Sign-in</button>
       </div>
-    
 
-    
     <script>
       var SCOPES = ['https://www.googleapis.com/auth/drive.file']
       var CLIENT_ID = '';
@@ -56,9 +53,9 @@
           })
         } else {
           setTimeout(auth, 10); //just in case the gapi lib is not loaded, we call it again
-        }        
+        }
       }
-      
+
       function login() {
         loginService.login(function(err, response){
           if (err){
@@ -68,7 +65,7 @@
             console.log('Login ok')
             is_auth();
           }
-        })    
+        })
       } 
       
       //variable to reference the file id that we are modified, used when updated it
@@ -78,7 +75,6 @@
           name: 'gDriveSync.example.txt'
         };
 
-
       function save() {
         window.current_file.content = $('#textEditor').val()
         driveService.saveFile(window.current_file, function(file){
@@ -86,13 +82,13 @@
           console.log('saved file with id:'+file.id)
         })
       }
-      
+
       function load(fileId) {
         var file = {id: fileId }
         window.driveService.loadFile(file, function(file){
           window.current_file = file;
           $('#textEditor').val(file.content);
-        })           
+        })
       }
 
       function list() {
@@ -114,25 +110,25 @@
             }).appendTo(li);
             $('#filesListSection ul').append(li)
           });
-        })     
-      }      
+        })
+      }
+
       //Just jquery stuff to hide, show divs
       $( document ).ready(function() {
         $('.not_authenticated').hide();
         $('.authenticated').hide();
       });
-      
+
       function is_auth() {
         $('.not_authenticated').hide();
         $('.authenticated').show();
       }
-      
+
       function not_auth() {
         $('.not_authenticated').show();
         $('.authenticated').hide();
       }      
-            
-        
+
     </script>
     <script src="https://apis.google.com/js/client.js?onload=init_gapi"></script>
   </body>
