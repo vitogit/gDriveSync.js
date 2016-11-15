@@ -70,3 +70,7 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 The library code is based on this example https://github.com/googledrive/web-quickeditor but using the Google Drive api v3 and plain Javascript.
+
+## Info
+
+This is not intended to use in a production envioronment, it just for educational purposes.
