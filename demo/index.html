@@ -5,14 +5,14 @@
     <script src="../lib/drive.service.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
     			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-    			  crossorigin="anonymous"></script>    
+    			  crossorigin="anonymous"></script>
   </head>
   <body>
     <h1>gDriveSync</h1>
 
-      <div class="authenticated">
-        Logged in <br/>
-        
+      <div style="display: none;" class="authenticated">
+        Logged in as <span id="useremail"></span> <button onclick="signOut()">Sign-out</button><br/><br/>
+
         <textarea id="textEditor">Write here</textarea><br/>
         <a href="#" onclick="save()">save</a>
         <a href="#" onclick="load()">load</a>
@@ -24,50 +24,49 @@
         </div>
       </div>
 
-      <div class="not_authenticated">
+      <div style="display: none;" class="not_authenticated">
         <p>Please sign-in with your Google account to continue.</p>
-        <button onclick="login()">Sign-in</button>
+        <button onclick="signIn()">Sign-in</button>
       </div>
 
     <script>
-      var SCOPES = ['https://www.googleapis.com/auth/drive.file']
+      //SCOPES: scopes to request, as a space-delimited string. 
+      //CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
+      //DISCOVERY_DOCS: are the apis that we are going to use. An array of discovery doc URLs or discovery doc JSON objects.
+      var SCOPES = 'https://www.googleapis.com/auth/drive.file';
       var CLIENT_ID = '';
-      window.loginService = new LoginService(CLIENT_ID, SCOPES);
+      var DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
+
+      window.loginService = new LoginService(CLIENT_ID, SCOPES, DISCOVERY_DOCS);
       window.driveService = new DriveService();
 
-      function init_gapi() {
-        gapi.client.load('drive' , 'v3');
-        auth();
-      } 
+      //Try to automactically signin
+      function initClient() {
+        //We pass a callback function to initClient, that return true/false if user is signin/signoff
+        window.loginService.initClient(updateSigninStatus)
+      }
       
-      function auth() {
-        if (gapi && gapi.auth) {
-          window.loginService.checkAuth(function(err, response){
-            if (err){
-              console.log('show login dialog')
-              not_auth();
-            } else {
-              console.log('is logged in')
-              is_auth();
-            }
-          })
+      function initGapi() {
+        gapi.load('client:auth2', initClient);
+      } 
+
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          var useremail = window.loginService.userProfile().getEmail();
+          is_auth(useremail)
         } else {
-          setTimeout(auth, 10); //just in case the gapi lib is not loaded, we call it again
+          not_auth();
         }
       }
-
-      function login() {
-        loginService.login(function(err, response){
-          if (err){
-            console.log('Login error')
-            not_auth();
-          } else {
-            console.log('Login ok')
-            is_auth();
-          }
-        })
-      } 
       
+      function signIn() {
+        window.loginService.signIn();
+      } 
+
+      function signOut() {
+        window.loginService.signOut();
+      }
+
       //variable to reference the file id that we are modified, used when updated it
       window.current_file = {
           content: '',
@@ -114,14 +113,11 @@
       }
 
       //Just jquery stuff to hide, show divs
-      $( document ).ready(function() {
-        $('.not_authenticated').hide();
-        $('.authenticated').hide();
-      });
 
-      function is_auth() {
+      function is_auth(useremail) {
         $('.not_authenticated').hide();
         $('.authenticated').show();
+        $('#useremail').html(useremail);
       }
 
       function not_auth() {
@@ -130,6 +126,6 @@
       }      
 
     </script>
-    <script src="https://apis.google.com/js/client.js?onload=init_gapi"></script>
+    <script src="https://apis.google.com/js/api.js?onload=initGapi"></script>
   </body>
 </html>
