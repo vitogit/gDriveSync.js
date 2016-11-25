@@ -13,9 +13,9 @@ Add them to your app, for instance:
 
 Initialize it:
 
-SCOPES: scopes to request, as a space-delimited string. 
-CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
-DISCOVERY_DOCS: are the apis that we are going to use. An array of discovery doc URLs or discovery doc JSON objects.
+- SCOPES: scopes to request, as a space-delimited string. 
+- CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
+- DISCOVERY_DOCS: are the apis that we are going to use. An array of discovery doc URLs or discovery doc JSON objects.
       
 ```
       var SCOPES = 'https://www.googleapis.com/auth/drive.file'
