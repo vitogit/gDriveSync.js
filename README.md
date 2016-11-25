@@ -62,7 +62,7 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 - **drive.service.js**
   - **saveFile:** It creates a new document, or update an existing one if the file has an ID (parameter file)
   - **loadFile:** It return the file given an ID. (parameter file)
-  - **listFiles:** It return the files (id and name) from Google Drive.
+  - **listFiles:** It return the files (id and name) from Google Drive that contains the query_name. (parameters: query_name and callback function)
   
   
   A file is just an object like `var file = {id: null, name: 'testName', content='hello' }`

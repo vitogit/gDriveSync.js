@@ -83,7 +83,10 @@
       }
 
       function load(fileId) {
-        var file = {id: fileId }
+        var file = window.current_file
+        if (fileId) {
+          file = {id: fileId}
+        }
         window.driveService.loadFile(file, function(file){
           window.current_file = file;
           $('#textEditor').val(file.content);
@@ -91,7 +94,7 @@
       }
 
       function list() {
-        window.driveService.listFiles(function(err, files){
+        window.driveService.listFiles('gDriveSync', function(err, files){
           if (err) {
             console.log('List error:'+err)
             return
