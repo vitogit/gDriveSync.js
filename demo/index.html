@@ -13,12 +13,20 @@
       <div style="display: none;" class="authenticated">
         Logged in as <span id="useremail"></span> <button onclick="signOut()">Sign-out</button><br/><br/>
 
-        <textarea id="textEditor">Write here</textarea><br/>
-        <a href="#" onclick="save()">save</a>
-        <a href="#" onclick="load()">load</a>
-        <a href="#" onclick="list()">list</a>
+        File content: <textarea id="textEditor">Write here</textarea><br/><br/>
 
+        <a href="#" onclick="save()">save</a> a new file with name gDriveSync.example.txt<br/>
+        <a href="#" onclick="load()">load</a> the last saved file.
+        <br/></br/>
+        If name or folder not specified, it will get all files.</br/>
+        </br/>
+        </br/>
+        <a href="#" onclick="listFilesAt()">list files</a> name contains <input type=text id="fileName" value="gDriveSync"></input> and are in the folderId: <input type=text id="fileFolderId"></input><br/><br/>
+        <br/>
+        <a href="#" onclick="listFoldersAt()">list folders</a> name contains <input type=text id="folderName"></input> and are in the folderId: <input type=text id="folderId"></input><br/><br/>
+        </br/>
         <div id="filesListSection">
+          Click a file to load the content (make sure that is text/plain, for instance search for files named as gDriveSync that are the one that are saved).
           <ul>
           </ul>
         </div>
@@ -71,7 +79,8 @@
       window.current_file = {
           content: '',
           id:null,
-          name: 'gDriveSync.example.txt'
+          name: 'gDriveSync.example.txt',
+          parents: []
         };
 
       function save() {
@@ -93,28 +102,42 @@
         })
       }
 
-      function list() {
-        window.driveService.listFiles('gDriveSync', function(err, files){
-          if (err) {
-            console.log('List error:'+err)
-            return
-          }
-          $('#filesListSection ul').html("");
-          $.each(files, function( index, file ) {
-            var li = $('<li/>')
-            var newLink = $("<a />", {
-                href : "#",
-                class: 'file_link',
-                'data-id': file.id,
-                'data-name': file.name,
-                onclick: 'load("'+file.id+'")',
-                text: file.name
-            }).appendTo(li);
-            $('#filesListSection ul').append(li)
-          });
-        })
+      function listFiles() {
+        window.driveService.listFiles('gDriveSync',displayList) 
       }
 
+      function listFilesAt() {
+        var parents = $('#fileFolderId').val();
+        var fileName = $('#fileName').val();
+        window.driveService.listFilesAt(fileName, parents, displayList);
+      }
+
+      function listFoldersAt() {
+        var parents = $('#folderId').val();
+        var folderName = $('#folderName').val();
+        window.driveService.listFoldersAt(folderName, parents, displayList);
+      }
+      
+      function displayList(err, files){
+        if (err) {
+          console.log('List error:'+err)
+          return
+        }
+        $('#filesListSection ul').html("");
+        $.each(files, function( index, file ) {
+          var newLink = $("<a />", {
+              href : "#",
+              class: 'file_link',
+              'data-id': file.id,
+              'data-name': file.name,
+              onclick: 'load("'+file.id+'")',
+              text: file.name
+          });
+          var li = $('<li/>').append(newLink).append( ' | ' +file.id)
+          
+          $('#filesListSection ul').append(li)
+        });
+      }
       //Just jquery stuff to hide, show divs
 
       function is_auth(useremail) {

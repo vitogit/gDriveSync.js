@@ -60,17 +60,43 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 - **drive.service.js**
-  - **saveFile:** It creates a new document, or update an existing one if the file has an ID (parameter file)
-  - **loadFile:** It return the file given an ID. (parameter file)
-  - **listFiles:** It return the files (id and name) from Google Drive that contains the query_name. (parameters: query_name and callback function)
-  
-  
-  A file is just an object like `var file = {id: null, name: 'testName', content='hello' }`
+  - **saveFile:** It creates a new google document (application/vnd.google-apps.document), or update an existing one if the file has an ID (parameter file) If the file object specified the parents parameter (array of folders ids) it will save the file in that specific folder.
+  - **loadFile:** It loads a google document as text (plain/text) given an ID. (parameter file)
+  - **list:** It return the files (id and name) from Google Drive (parameters: resource and callback function). resource= {query_name:'', parents:'', mimeType:''}
+    - **listFiles:** It return the files (id and name) from Google Drive that contains the query_name. (parameters: query_name and callback function)
+    - **listFilesAt:** It return the files (id and name) from Google Drive that contains the query_name and are at a specific folder (parents parameter). (parameters: query_name, parents and callback function)
+    - **listFolders:** It return the folders (id and name) from Google Drive that contains the query_name. (parameters: query_name and callback function)
+    - **listFoldersAt:** It return the folders (id and name) from Google Drive that contains the query_name and are at a specific folder (parents parameter). (parameters: query_name, parents and callback function)    
+
+
+  A file is just an object like 
+  ```
+  var file = {id: null, name: 'testName', content:'hello' , parents:['folderId']}
+  ```
+  A resource is just an object like 
+  ```
+  var resource = {query_name:'file_name', parents:'folderId', mimeType:'plain/text' }
+  ```
 
 
 
-The library code is based on this example https://github.com/googledrive/web-quickeditor but using the Google Drive api v3 and plain Javascript.
+## Changelog
+
+#### v0.2.0
+- Add generic `list` method to list files and folders using parameters: query_name (name contains query_name), parents (specific folder to look), mimeType
+- Add helper methods to make it easy to list files (listFilesAt,listFiles) and folders(listFoldersAt, listFolders).
+- Save file to specific folder: Pass parents:['folderId'] to the file object when doing saveFile. 
+This will add the file named filename.txt to the specific folder with folderId
+```
+  var file = {name: 'filename.txt', parents:['folderId'], content:'hello'};
+  driveService.saveFile(file, function(savedFile){
+    console.log('saved file with id:'+savedFile.id)
+  })
+```
 
 ## Info
 
-This is not intended to use in a production envioronment, it just for educational purposes.
+This is not intended to use in a production environment, it just for educational purposes.
+
+*
+The library code is based on this example https://github.com/googledrive/web-quickeditor but using the Google Drive api v3 and plain Javascript.*
