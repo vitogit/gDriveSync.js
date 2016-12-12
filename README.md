@@ -3,26 +3,54 @@ Javascript wrapper library for Google Drive API v3.
 
 It authenticate, save, load and list documents from your google drive.
 
-## How to use it?
-There are two files: login.service.js and drive.service.js. 
+## Install : Adding the library
+
+### Simple download the lib
+Download the files in the lib folder: login.service.js and drive.service.js. 
 Add them to your app, for instance:
 ```    
 <script src="../lib/login.service.js"></script>
 <script src="../lib/drive.service.js"></script>
 ```
 
-Initialize it:
+### Bower
+```
+  bower install gdrive-sync-js --save
+```
 
-- SCOPES: scopes to request, as a space-delimited string. 
-- CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
-- DISCOVERY_DOCS: are the apis that we are going to use. An array of discovery doc URLs or discovery doc JSON objects.
-      
+Then import the library
+```    
+<script src="../bower_components/lib/login.service.js"></script>
+<script src=".../bower_components/lib/drive.service.js"></script>
+```
+
+### Npm
+```
+  npm install gdrive-sync-js --save
+```
+
+Then import the library
+```    
+  <script src="../node_modules/gdrive-sync-js/lib/login.service.js"></script>
+  <script src="../node_modules/gdrive-sync-js/lib/drive.service.js"></script>
+```
+
+## How to use it
+After the lib is loaded you can use the new service like this
+
 ```
       var SCOPES = 'https://www.googleapis.com/auth/drive.file'
       var CLIENT_ID = 'YOUR CLIENT ID';
       DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
       window.loginService = new LoginService(CLIENT_ID, SCOPES, DISCOVERY_DOCS);
 ```
+
+
+- SCOPES: scopes to request, as a space-delimited string. 
+- CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
+- DISCOVERY_DOCS: are the apis that we are going to use. An array of discovery doc URLs or discovery doc JSON objects.
+    
+    
 For more info check the Demo
 
 
