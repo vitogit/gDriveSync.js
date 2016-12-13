@@ -109,6 +109,10 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 ## Changelog
+#### v0.3.0
+
+- Published to npm and bower
+- Updated readme with steps to install it using npm and bower
 
 #### v0.2.0
 - Add generic `list` method to list files and folders using parameters: query_name (name contains query_name), parents (specific folder to look), mimeType
