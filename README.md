@@ -54,7 +54,25 @@ After the lib is loaded you can use the new service like this
 For more info check the Demo
 
 
-## Demo
+## File Explorer Demo (list folders and files)
+
+![File Explorer](http://tinypic.com/r/33u721v/9)
+Add your api client_id to demo/fileExplorer/index.html. You can get the client id following the instruction
+from step1 here https://developers.google.com/drive/v3/web/quickstart/js
+
+Clone, install and run
+```
+npm install
+npm start //to run the dev server
+```
+
+Then go to localhost:4000/demo/fileExplorer
+
+It will ask for signin using a google account, or automatically signin if you already authorized the app. 
+
+This demo list the folders and files from your root folder ordered by type and name. If you click in a folder it will open it and also will show in "selected resources" the folder id. If you select a file it will show you the file id.
+
+## Old Demo (list, save, load documents)
 
 Add your api client_id to demo/index.html. You can get the client id following the instruction
 from step1 here https://developers.google.com/drive/v3/web/quickstart/js
@@ -115,6 +133,9 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 ## Changelog
+#### v0.3.3
+- Add fileExplorer Demo
+
 #### v0.3.2
 - Add orderBy option to list files
 

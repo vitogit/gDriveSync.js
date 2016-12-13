@@ -1,0 +1,169 @@
+<html>
+  <head>
+    <title>gDriveSync File Explorer</title>
+    <script src="../../lib/login.service.js"></script>
+    <script src="../../lib/drive.service.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    			  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    			  crossorigin="anonymous"></script>
+            
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">          
+    <style>
+      .not_authenticated, .authenticated {
+        display: none;
+      }    
+      .breadcrumb {
+        margin: 0;
+        padding: 5px;
+      }
+      .glyphicon {
+        padding-right:5px;
+        color: #508fc5;
+      }
+      #fileFinder li {
+        list-style-type: none;
+      }
+      #selectedResource{
+        padding:10px;
+      }
+    </style>  
+  </head>
+  <body>
+    <div class="not_authenticated">
+      <p>Please sign-in with your Google account to continue.</p>
+      <button onclick="signIn()">Sign-in</button>
+    </div>
+    
+    <div id="container" class="container authenticated">
+      <div id="container-header">
+        <h1>File Explorer</h1> <span><i id="useremail"></i> - <a href="#"onclick="signOut()">Sign-Out</a></span>
+      </div>      
+      <div class="row">
+        <div id="fileFinder" class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">FileFinder</h3>
+            <div id="selectedResource">
+              Selected Resource: <span></span>
+            </div>
+            <ol class="breadcrumb" id="breadcrumb">
+              <li><a class="active" href="#" onclick="openFolder('root')">Home</a></li>
+            </ol>
+          </div>
+          <div class="panel-body">
+            <ul></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      //SCOPES: scopes to request, as a space-delimited string. 
+      //CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
+      //DISCOVERY_DOCS: are the apis that we are going to use. An array of discovery doc URLs or discovery doc JSON objects.
+      var SCOPES = 'https://www.googleapis.com/auth/drive.file';
+      var CLIENT_ID = '';
+      var DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
+
+      window.loginService = new LoginService(CLIENT_ID, SCOPES, DISCOVERY_DOCS);
+      window.driveService = new DriveService();
+
+      //Try to automactically signin
+      function initClient() {
+        //We pass a callback function to initClient, that return true/false if user is signin/signoff
+        window.loginService.initClient(updateSigninStatus)
+      }
+      
+      function initGapi() {
+        gapi.load('client:auth2', initClient);
+      } 
+
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          var useremail = window.loginService.userProfile().getEmail();
+          is_auth(useremail);
+          listRoot();
+        } else {
+          not_auth();
+        }
+      }
+      
+      function signIn() {
+        window.loginService.signIn();
+      } 
+
+      function signOut() {
+        window.loginService.signOut();
+      }
+
+      //variable to reference the selected file or folder
+      window.current_file = {
+          content: '',
+          id:null,
+          name: '',
+          parents: []
+      };
+
+      function listRoot() {
+        $('#fileFinder ul').html("");
+        //window.driveService.list({query_name:'', parents:'root', trashed:false, mimeType: 'application/vnd.google-apps.folder'}, displayList)
+        window.driveService.list({query_name:'', parents:'root', trashed:false, orderBy:'folder,name'}, displayList)
+      }
+      
+      function displayList(err, files, icon){
+        if (err) {
+          console.log('List error:'+err)
+          return
+        }
+        $.each(files, function( index, file ) {
+          var newLink = $("<a />", {
+              href : "#",
+              class: 'file_link ',
+              'data-id': file.id,
+              'data-name': file.name,
+              text: file.name
+          });
+
+          var icon = $('<i/>')
+
+          if (file.mimeType=="application/vnd.google-apps.folder") {
+            $(newLink).attr('onclick','openFolder("'+file.id+'")')
+            $(icon).attr('class','folder_icon glyphicon glyphicon-folder-open')
+          } else {
+            $(newLink).attr('onclick','openFile("'+file.id+'")')
+            $(icon).attr('class','file_icon glyphicon glyphicon-file' )
+          }
+          var li = $('<li/>').append(icon).append(newLink)
+          
+          $('#fileFinder ul').append(li)
+        });
+      }
+      
+      function openFolder(fileId) {
+        $('#fileFinder ul').html("");
+        $('#selectedResource span').html(fileId);
+        window.driveService.list({query_name:'', parents:fileId, trashed:false, orderBy:'folder,name'}, displayList)
+
+      }
+      
+      function openFile(fileId) {
+        $('#selectedResource span').html(fileId);
+      }      
+      //Just jquery stuff to hide, show divs
+
+      function is_auth(useremail) {
+        $('.not_authenticated').hide();
+        $('.authenticated').show();
+        $('#useremail').html(useremail);
+      }
+
+      function not_auth() {
+        $('.not_authenticated').show();
+        $('.authenticated').hide();
+      }      
+
+    </script>
+    <script src="https://apis.google.com/js/api.js?onload=initGapi"></script>
+  </body>
+</html>
