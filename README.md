@@ -101,14 +101,23 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
   ```
   var file = {id: null, name: 'testName', content:'hello' , parents:['folderId']}
   ```
+  
   A resource is just an object like 
   ```
-  var resource = {query_name:'file_name', parents:'folderId', mimeType:'plain/text' ,trashed:false}
+  var resource = {query_name:'file_name', parents:'folderId', mimeType:'plain/text' ,trashed:false , orderBy: 'name'}
   ```
+  This is used to pass options to the list method. 
+  - **trashed:** boolean value, true to show just files that are in the trash. false to not show them. not set to show everything.
+  - **orderBy:** A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 'modifiedTime', 'name', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', and 'viewedByMeTime'. Each key sorts ascending by default, but may be reversed with the 'desc' modifier.
+  
+  More info: [https://developers.google.com/drive/v3/reference/files/list](https://developers.google.com/drive/v3/reference/files/list)
 
 
 
 ## Changelog
+#### v0.3.2
+- Add orderBy option to list files
+
 #### v0.3.1
 - Add trashed option to just list files and folders that are not in the trash bin.
 - listFiles, listFilesAt, listFolders and list FoldersAt don´t show trashed files by default.
