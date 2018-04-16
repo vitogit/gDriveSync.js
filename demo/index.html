@@ -15,8 +15,11 @@
 
         File content: <textarea id="textEditor">Write here</textarea><br/><br/>
 
-        <a href="#" onclick="save()">save</a> a new file with name gDriveSync.example.txt<br/>
-        <a href="#" onclick="load()">load</a> the last saved file.
+        <a href="#" onclick="save()">save</a> a new file Google Document with name gDriveSync.example.txt<br/>
+        <a href="#" onclick="load()">load</a> the last saved Google Document file.<br/><br/>
+        
+        <a href="#" onclick="saveRaw()">save raw</a> is useful when your data is json or plain. It will save the file object as JSON<br/>
+        <a href="#" onclick="loadRaw()">load raw</a> is useful when your data is json or plain. the last saved file.
         <br/></br/>
         If name or folder not specified, it will get all files.</br/>
         </br/>
@@ -82,7 +85,28 @@
           name: 'gDriveSync.example.txt',
           parents: []
         };
+      function saveRaw() {
+        window.current_file.content = $('#textEditor').val()
+        window.current_file.name = 'gDriveSync.example.json'
+        var jsonString = JSON.stringify(window.current_file) 
+        window.current_file.content = jsonString
+        driveService.saveFileRaw(window.current_file, function(file){
+          window.current_file = file
+          console.log('saved file with id:'+file.id)
+        })
+      }
 
+      function loadRaw(fileId) {
+        var file = window.current_file
+        if (fileId) {
+          file = {id: fileId}
+        }
+        window.driveService.loadFileRaw(file, function(file){
+          window.current_file = file;
+          $('#textEditor').val(file.content);
+        })
+      }
+      
       function save() {
         window.current_file.content = $('#textEditor').val()
         driveService.saveFile(window.current_file, function(file){

@@ -1,6 +1,6 @@
 {
   "name": "gdrive-sync-js",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "description": "Save, load and list files with Google Drive API Javascript v3",
   "main": "index.js",
   "scripts": {

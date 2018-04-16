@@ -107,6 +107,9 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 - **drive.service.js**
+  - **saveFileRaw:** It creates a new raw file without mimetype, or update an existing one if the file has an ID (parameter file) If the file object specified the parents parameter (array of folders ids) it will save the file in that specific folder. Useful to save json files. Save it as file.json
+  - **loadFileRaw:** It loads a file given an ID. (parameter file)
+  
   - **saveFile:** It creates a new google document (application/vnd.google-apps.document), or update an existing one if the file has an ID (parameter file) If the file object specified the parents parameter (array of folders ids) it will save the file in that specific folder.
   - **loadFile:** It loads a google document as text (plain/text) given an ID. (parameter file)
   - **list:** It return the files (id and name) from Google Drive (parameters: resource and callback function). resource= {query_name:'', parents:'', mimeType:'', trashed:false}
@@ -134,6 +137,9 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 ## Changelog
+#### v0.3.5
+- Add load and save raw mode. Useful for json files
+
 #### v0.3.3
 - Add fileExplorer Demo
 
