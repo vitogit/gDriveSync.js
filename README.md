@@ -56,7 +56,7 @@ For more info check the Demo
 
 ## File Explorer Demo (list folders and files)
 
-![File Explorer](http://i65.tinypic.com/33u721v.png)
+<img width="437" alt="Screen Shot 2020-03-11 at 4 31 14 PM" src="https://user-images.githubusercontent.com/5280619/76456488-d27f2600-63b5-11ea-825f-7328e5638d52.png">
 
 Add your api client_id to demo/fileExplorer/index.html. You can get the client id following the instruction
 from step1 here https://developers.google.com/drive/v3/web/quickstart/js
@@ -64,16 +64,17 @@ from step1 here https://developers.google.com/drive/v3/web/quickstart/js
 Clone, install and run
 ```
 npm install
-npm start //to run the dev server
+npm start // to run the dev server
 ```
 
-Then go to localhost:4000/demo/fileExplorer
+Then go to http://localhost:4000/demo/fileExplorer
 
 It will ask for signin using a google account, or automatically signin if you already authorized the app. 
 
 This demo list the folders and files from your root folder ordered by type and name. If you click in a folder it will open it and also will show in "selected resources" the folder id. If you select a file it will show you the file id.
 
-##Demo (list, save, load documents)
+## Barebones Save Google doc Demo (list, save, load documents)
+<img width="596" alt="Screen Shot 2020-03-11 at 4 40 17 PM" src="https://user-images.githubusercontent.com/5280619/76457163-06a71680-63b7-11ea-8c68-917c9dc3abdc.png">
 
 Add your api client_id to demo/index.html. You can get the client id following the instruction
 from step1 here https://developers.google.com/drive/v3/web/quickstart/js
@@ -81,10 +82,10 @@ from step1 here https://developers.google.com/drive/v3/web/quickstart/js
 Clone, install and run
 ```
 npm install
-npm start //to run the dev server
+npm start // to run the dev server
 ```
 
-Then go to localhost:4000/demo
+Then go to http://localhost:4000/demo
 
 The demo uses jQuery but just for hide/show stuff, is not needed.
 
@@ -137,6 +138,10 @@ The document has a mimeType of application/vnd.google-apps.document' this is a g
 
 
 ## Changelog
+
+#### v0.3.7
+- Update lightserver library and update readme
+
 #### v0.3.5
 - Add load and save raw mode. Useful for json files
 

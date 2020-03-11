@@ -57,7 +57,6 @@
       </div>
     </div>
 
-
     <script>
       //SCOPES: scopes to request, as a space-delimited string. 
       //CLIENT_ID: The app's client ID, found and created in the Google Developers Console.
@@ -88,10 +87,10 @@
           not_auth();
         }
       }
-      
+
       function signIn() {
         window.loginService.signIn();
-      } 
+      }
 
       function signOut() {
         window.loginService.signOut();
@@ -110,7 +109,7 @@
         //window.driveService.list({query_name:'', parents:'root', trashed:false, mimeType: 'application/vnd.google-apps.folder'}, displayList)
         window.driveService.list({query_name:'', parents:'root', trashed:false, orderBy:'folder,name'}, displayList)
       }
-      
+
       function displayList(err, files, icon){
         if (err) {
           console.log('List error:'+err)
@@ -144,14 +143,13 @@
         $('#fileFinder ul').html("");
         $('#selectedResource span').html(fileId);
         window.driveService.list({query_name:'', parents:fileId, trashed:false, orderBy:'folder,name'}, displayList)
-
       }
-      
+
       function openFile(fileId) {
         $('#selectedResource span').html(fileId);
-      }      
-      //Just jquery stuff to hide, show divs
+      }
 
+      //Just jquery stuff to hide, show divs
       function is_auth(useremail) {
         $('.not_authenticated').hide();
         $('.authenticated').show();
@@ -161,7 +159,7 @@
       function not_auth() {
         $('.not_authenticated').show();
         $('.authenticated').hide();
-      }      
+      }
 
     </script>
     <script src="https://apis.google.com/js/api.js?onload=initGapi"></script>
